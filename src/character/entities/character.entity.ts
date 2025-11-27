@@ -2,7 +2,7 @@ import { Column, Entity, IntegerType, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Character {
-     @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn('uuid')
     id: number;
 
     @Column('text', {
