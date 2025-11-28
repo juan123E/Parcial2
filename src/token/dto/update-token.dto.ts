@@ -1,4 +1,7 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateTokenDto } from './create-token.dto';
+import { IsString, MinLength } from "class-validator";
 
-export class UpdateTokenDto extends PartialType(CreateTokenDto) {}
+export class CreateTokenDto {
+    @IsString()
+    @MinLength(1)
+    token: string;
+}

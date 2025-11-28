@@ -19,7 +19,7 @@ export class TokenService {
   async findOne(id: string) {
     const token = await this.tokenRepository.findOneBy({ id });
     if (!token) return false;
-    return token.Active && token.reqLeft > 0;
+    return token.active && token.reqLeft > 0;
   }
 
   async reduceReqLeft(id: string) {

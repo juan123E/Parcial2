@@ -1,26 +1,16 @@
-import { Column, Entity, IntegerType, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Token {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column('text', {
-        unique: true,
-        nullable: false,
-    })
-    Token: string;
+    @Column('text', { unique: true }) 
+    token: string;
 
-    @Column('bool', {
-        nullable:false,
-        default: true
-    })
-    Active: boolean;
+    @Column('boolean', { default: true })
+    active: boolean;
 
-    @Column({
-        type: 'number',
-        nullable: false,
-        default: 10,
-    })
-    reqLeft :number;
+    @Column('int', { default: 10 }) 
+    reqLeft : number;
 }
