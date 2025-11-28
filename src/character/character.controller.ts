@@ -1,34 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Headers, ParseIntPipe } from '@nestjs/common';
 import { CharacterService } from './character.service';
 import { CreateCharacterDto } from './dto/create-character.dto';
-import { UpdateCharacterDto } from './dto/update-character.dto';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'src/guards/auth/auth.guard';
 
 @Controller('character')
+@UseGuards(AuthGuard)
 export class CharacterController {
   constructor(private readonly characterService: CharacterService) {}
 
   @Post()
-  create(@Body() createCharacterDto: CreateCharacterDto) {
-    return this.characterService.create(createCharacterDto);
+  create(
+    @Body() createCharacterDto: CreateCharacterDto,
+    @Headers('x-token-id') tokenId: string
+  ) {
+    return this.characterService.create(createCharacterDto, tokenId);
   }
 
-  @Get()
-  findAll() {
-    return this.characterService.findAll();
+  @Patch(':id/favorites/:locationId')
+  addFavorite(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('locationId', ParseIntPipe) locationId: number,
+    @Headers('x-token-id') tokenId: string
+  ) {
+    return this.characterService.addFavorite(id, locationId, tokenId);
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: number) {
-    return this.characterService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: number, @Body() updateCharacterDto: UpdateCharacterDto) {
-    return this.characterService.update(+id, updateCharacterDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: number) {
-    return this.characterService.remove(id);
+  @Get(':id/taxes')
+  calculateTaxes(
+    @Param('id', ParseIntPipe) id: number,
+    @Headers('x-token-id') tokenId: string
+  ) {
+    return this.characterService.calculateTaxes(id, tokenId);
   }
 }

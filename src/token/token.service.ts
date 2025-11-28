@@ -1,26 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateTokenDto } from './dto/create-token.dto';
-import { UpdateTokenDto } from './dto/update-token.dto';
+import { Token } from './entities/token.entity';
 
 @Injectable()
 export class TokenService {
-  create(createTokenDto: CreateTokenDto) {
-    return 'This action adds a new token';
+  constructor(
+    @InjectRepository(Token)
+    private readonly tokenRepository: Repository<Token>,
+  ) {}
+
+  async create(createTokenDto: CreateTokenDto) {
+    const token = this.tokenRepository.create(createTokenDto);
+    return await this.tokenRepository.save(token);
   }
 
-  findAll() {
-    return `This action returns all token`;
+  async findOne(id: string) {
+    const token = await this.tokenRepository.findOneBy({ id });
+    if (!token) return false;
+    return token.Active && token.reqLeft > 0;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} token`;
-  }
-
-  update(id: number, updateTokenDto: UpdateTokenDto) {
-    return `This action updates a #${id} token`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} token`;
+  async reduceReqLeft(id: string) {
+    const token = await this.tokenRepository.findOneBy({ id });
+    if (!token) throw new NotFoundException('Token not found');
+    
+    if (token.reqLeft > 0) {
+      token.reqLeft -= 1;
+      await this.tokenRepository.save(token);
+    }
+    return true;
   }
 }

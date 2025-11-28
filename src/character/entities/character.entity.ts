@@ -1,36 +1,25 @@
-import { Column, Entity, IntegerType, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Location } from "src/location/entities/location.entity";
 
 @Entity()
 export class Character {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @Column('text', {
-        nullable: false,
-    })
+    @Column('text')
     name: string;
 
-    @Column({
-        type: 'number',
-        nullable: false,
-        default: 0,
-    })
-    salary:number;
-     @Column('bool', {
-        nullable:false,
-        default: false
-    })
+    @Column('float')
+    salary: number;
+
+    @Column('bool', { default: false })
     employee: boolean;
-    @Column('text',{
-        nullable: false
-    })
-    property: string
-    @Column('text', {
-        array: true,
-        nullable: true
-    })
-    favPlaces: string[]
 
+    @OneToOne(() => Location, (location) => location.owner, { nullable: true })
+    @JoinColumn()
+    property: Location;
 
-   
+    @ManyToMany(() => Location, (location) => location.favCharacters)
+    @JoinTable()
+    favPlaces: Location[];
 }

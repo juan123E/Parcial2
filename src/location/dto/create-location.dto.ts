@@ -1,19 +1,19 @@
-import { IsArray, IsBoolean, IsNumber, IsOptional, IsPositive, 
-    IsString, MinLength } from "class-validator";
+import { IsNumber, IsPositive, IsString, MinLength } from "class-validator";
 
 export class CreateLocationDto {
-
     @IsString()
     @MinLength(1)
     name: string;
 
     @IsString()
-    @IsOptional()
     @MinLength(1)
-    type?: string;
+    type: string;
 
-    @IsPositive()
     @IsNumber()
+    @IsPositive()
     cost: number;
-    
-  }
+
+    @IsNumber()
+    @IsPositive()
+    ownerId: number;
+}

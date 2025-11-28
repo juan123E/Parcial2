@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   providers: [TokenService],
   imports: [
     TypeOrmModule.forFeature([Token])
-  ]
+  ],
+  exports: [TokenService] 
 })
 export class TokenModule {}

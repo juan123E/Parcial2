@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, ParseUUIDPipe } from '@nestjs/common';
 import { TokenService } from './token.service';
 import { CreateTokenDto } from './dto/create-token.dto';
-import { UpdateTokenDto } from './dto/update-token.dto';
 
 @Controller('token')
 export class TokenController {
@@ -12,23 +11,13 @@ export class TokenController {
     return this.tokenService.create(createTokenDto);
   }
 
-  @Get()
-  findAll() {
-    return this.tokenService.findAll();
-  }
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tokenService.findOne(+id);
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.tokenService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTokenDto: UpdateTokenDto) {
-    return this.tokenService.update(+id, updateTokenDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tokenService.remove(+id);
+  @Patch('reduce/:id')
+  reduceReqLeft(@Param('id', ParseUUIDPipe) id: string) {
+    return this.tokenService.reduceReqLeft(id);
   }
 }

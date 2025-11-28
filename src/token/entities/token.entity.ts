@@ -3,7 +3,7 @@ import { Column, Entity, IntegerType, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export class Token {
     @PrimaryGeneratedColumn('uuid')
-    id: number;
+    id: string;
 
     @Column('text', {
         unique: true,

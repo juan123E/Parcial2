@@ -1,24 +1,23 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Character } from "src/character/entities/character.entity";
 
 @Entity()
 export class Location {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @Column('text', {
-        nullable: false
-    })
+    @Column('text')
     name: string;
 
-    @Column({
-        type: 'text',
-        nullable: true
-    })
+    @Column('text')
     type: string;
-   @Column({
-        type: 'number',
-        nullable: false,
-    })
-    cost:number;
 
+    @Column('float')
+    cost: number;
+
+    @OneToOne(() => Character, (character) => character.property)
+    owner: Character;
+
+    @ManyToMany(() => Character, (character) => character.favPlaces)
+    favCharacters: Character[];
 }
