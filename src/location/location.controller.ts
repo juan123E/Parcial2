@@ -4,7 +4,6 @@ import { CreateLocationDto } from './dto/create-location.dto';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth/auth.guard';
 
-@Controller('character')
 @UseGuards(AuthGuard)
 @Controller('location')
 export class LocationController {
